@@ -1,16 +1,17 @@
 # Check if CA-tools pod is running
 - name: "Waiting for CA-tool in {{ item.name | lower }}-net"
   include_role:
-    name: "../../shared/configuration/roles/check/helm_component"
+    name: "{{ playbook_dir }}/../../shared/configuration/roles/check/helm_component"
   vars:
     component_type: "Pod"
     namespace: "{{ item.name | lower }}-net"
     component_name: "ca-tools"
-    check: "name"
+    label_selectors:
+      - name = {{ component_name }}
 
 # Ensure ca directory is present in build
 - include_role:
-    name: "../../shared/configuration/roles/check/setup"
+    name: "{{ playbook_dir }}/../../shared/configuration/roles/check/setup"
   vars:
     path: "./build/crypto-config/ordererOrganizations/{{ component_name }}/ca"
     check: "ensure_dir"
