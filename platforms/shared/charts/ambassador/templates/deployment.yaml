@@ -43,13 +43,13 @@ subjects:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ambassador
+  name: ambassador-dev-a
   namespace: default
 spec:
   replicas: 3
   selector:
     matchLabels:
-      name: ambassador
+      name: ambassador-dev-a
   template:
     metadata:
       annotations:
@@ -69,7 +69,7 @@ spec:
                 matchLabels:
                   service: ambassador
               topologyKey: kubernetes.io/hostname
-      serviceAccountName: ambassador
+      serviceAccountName: ambassador-dev-a
       containers:
       - name: ambassador
         image: {{ .Values.ambassador.image }}:{{ .Values.ambassador.tag }}
