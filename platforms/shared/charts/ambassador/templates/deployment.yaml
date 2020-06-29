@@ -18,7 +18,7 @@ metadata:
   name: ambassador
   namespace: default
   labels:
-    app.kubernetes.io/managed-by: helm
+    app.kubernetes.io/managed-by: Helm
     meta.helm.sh/release-name: ambassador
     meta.helm.sh/release-namespace: default
 
