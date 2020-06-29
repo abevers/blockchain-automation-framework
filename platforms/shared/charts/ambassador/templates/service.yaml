@@ -18,7 +18,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ambassador
+  name: ambassador-dev-a
   namespace: default
   {{- if .Values.ambassador.eip }}
   annotations:
