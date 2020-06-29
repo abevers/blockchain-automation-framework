@@ -2,7 +2,7 @@
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
-  name: ambassador
+  name: ambassador-dev-a
   labels:
     app.kubernetes.io/managed-by: Helm
     meta.helm.sh/release-name: ambassador-dev-a
