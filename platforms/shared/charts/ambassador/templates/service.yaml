@@ -3,13 +3,13 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    service: ambassador-admin
-  name: ambassador-admin
+    service: ambassador-admin-dev-a
+  name: ambassador-admin-dev-a
   namespace: default
 spec:
   type: ClusterIP
   ports:
-  - name: ambassador-admin
+  - name: ambassador-admin-dev-a
     port: 80
     targetPort: 8877
   selector:
