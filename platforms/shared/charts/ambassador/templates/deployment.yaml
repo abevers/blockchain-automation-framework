@@ -19,7 +19,7 @@ rules:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: ambassador
+  name: ambassador-dev-a
   namespace: ambassador-test
   labels:
     app.kubernetes.io/managed-by: Helm
@@ -30,11 +30,11 @@ metadata:
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
-  name: ambassador
+  name: ambassador-dev-a
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: ambassador
+  name: ambassador-dev-a
 subjects:
 - kind: ServiceAccount
   name: ambassador
