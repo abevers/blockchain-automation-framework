@@ -57,7 +57,7 @@ spec:
         "consul.hashicorp.com/connect-inject": "false"
       labels:
         service: ambassador
-        name: ambassador
+        name: ambassador-dev-a
         instance: {{ .Release.Name }}
     spec:
       affinity:
