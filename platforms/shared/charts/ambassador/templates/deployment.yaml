@@ -2,11 +2,7 @@
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
-  name: ambassador-dev-a
-  labels:
-    app.kubernetes.io/managed-by: Helm
-    meta.helm.sh/release-name: ambassador
-    meta.helm.sh/release-namespace: ambassador-test
+  name: ambassador
 rules:
 - apiGroups: [""]
   resources:
@@ -19,37 +15,32 @@ rules:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: ambassador-dev-a
-  namespace: ambassador-test
-  labels:
-    app.kubernetes.io/managed-by: Helm
-    meta.helm.sh/release-name: ambassador
-    meta.helm.sh/release-namespace: ambassador-test
-
+  name: ambassador
+  namespace: default
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
-  name: ambassador-dev-a
+  name: ambassador
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: ambassador-dev-a
+  name: ambassador
 subjects:
 - kind: ServiceAccount
   name: ambassador
-  namespace: ambassador-test
+  namespace: default
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ambassador-dev-a
+  name: ambassador
   namespace: default
 spec:
   replicas: 3
   selector:
     matchLabels:
-      name: ambassador-dev-a
+      name: ambassador
   template:
     metadata:
       annotations:
@@ -57,7 +48,7 @@ spec:
         "consul.hashicorp.com/connect-inject": "false"
       labels:
         service: ambassador
-        name: ambassador-dev-a
+        name: ambassador
         instance: {{ .Release.Name }}
     spec:
       affinity:
@@ -69,7 +60,7 @@ spec:
                 matchLabels:
                   service: ambassador
               topologyKey: kubernetes.io/hostname
-      serviceAccountName: ambassador-dev-a
+      serviceAccountName: ambassador
       containers:
       - name: ambassador
         image: {{ .Values.ambassador.image }}:{{ .Values.ambassador.tag }}
