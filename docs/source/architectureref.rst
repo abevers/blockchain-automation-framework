@@ -23,7 +23,8 @@ Key Management
 
 Key Management is the process of overseeing the generation, exchange, storage, use and destruction of cryptographic keys. Key Management is an important consideration for blockchain as all transactions in blockchain are signed using digital keys. Loss of keys can lead to financial loss as well as brand impact to the organization conducting the transaction.
 
-The Blockchain Automation Framework uses `Hashicorp Vault`_ to hold secrets that are used by the DLT platform. A secret is anything that you want to tightly control access to (e.g. API keys, passwords, certificates). Vault provides a unified interface to any secret, while providing tight access control and recording a detailed audit log. See the `Platform-Specific Reference Guides`_ for specific details on the structure of the Vault.
+The Blockchain Automation Framework uses `Hashicorp Vault`_ to hold secrets that are used by the DLT/Blockchain platform. A secret is anything that you want to tightly control access to (e.g. API keys, passwords, certificates). Vault provides a unified interface to any secret, while providing tight access control and recording a detailed audit log. `Hashicorp Vault`_ provides an abstraction on top of a Cloud KMS and does not create Cloud Platform lock-in.
+See the `Platform-Specific Reference Guides`_ for specific details on the structure of the Vault. Vault is a pre-requisite for BAF and should be configured and available before the automation is triggered.
 
 Identity and Access Management (IAM)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -37,9 +38,9 @@ Certificate Authority (CA)
 
 A Certificate Authority dispenses certificates to different actors. These certificates are digitally signed by the CA and bind together the actor with the actor’s public key (and optionally with a comprehensive list of properties). As a result, if one trusts the CA (and knows its public key), it can trust that the specific actor is bound to the public key included in the certificate, and owns the included attributes, by validating the CA’s signature on the actor’s certificate.
 
-For test and dev environments, the Blockchain Automation Framework generates certificates and keys and also provides CA servers (Fabric only). 
+For test and dev environments, the Blockchain Automation Framework generates certificates and keys (for all Platforms) and also provides CA servers (Fabric only). 
 
-For production use, generation of certificates, keys and CA servers via the Blockchain Automation Framework is not recommended. The existing certificates and keys can be placed in Vault in the paths described in :doc:`architectureref/certificates_path_list_corda` and :doc:`architectureref/certificates_path_list_fabric`
+For production use, generation of certificates, keys and CA servers via the Blockchain Automation Framework is not recommended. The existing certificates and keys can be placed in Vault in the paths described under subsections of `Platform-Specific Reference Guides`_ .
 
 Policies/Operations
 ~~~~~~~~~~~~~~~~~~~
@@ -62,7 +63,7 @@ The Blockchain Automation Framework utilizes Git as the version management tool.
 Configuration Management
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Configuration management involves automation of scripts and ad-hoc practices in a consistent, reliable and secure way. Configuration Management enables operators to set-up DLT networks idempotently by using minimum configuration changes.
+Configuration management involves automation of scripts and ad-hoc practices in a consistent, reliable and secure way. Configuration Management enables operators to set-up DLT/Blockchain networks idempotently by using minimum configuration changes.
 
 The Blockchain Automation Framework utilizes Ansible for configuration management. Ansible features a state driven, goal oriented resource model that describes the desired state of computer systems and services, not the paths to get them to this state. No matter what state a system is in, Ansible understands how to transform it to the desired state (and also supports a "dry run" mode to preview needed changes). This allows reliable and repeatable IT infrastructure configuration, avoiding the potential failures from scripting and script-based solutions that describe explicit and often irreversible actions rather than the end goal.
 
@@ -86,16 +87,17 @@ Build, Test, and Artifact Management
 
 Build, Test, and Artifact Management capabilities enable continuous delivery management by ensuring automation of the build and deployment of artefacts.
 
-The Blockchain Automation Framework (BAF) uses Jenkins Pipelines for easy modification of configuration file and deployment/reset of DLT network, building and storing of Docker images.
-BAF uses Nexus for static code analysis of the business logic (smart contracts).
+The Blockchain Automation Framework (BAF) uses TravisCI for running static tests, building and storing of Docker images. 
+Jenkins Pipelines (as code) are also available for continuous deployment/reset of DLT network. 
+Artefact management is not implemented yet, but GitHub Releases can be used for this.
 
 Delivery Management
 ~~~~~~~~~~~~~~~~~~~
-Delivery Management is the process where all software, artifacts and data from disparate tools used to move a product or feature from initial idea to max adoption are integrated into a unified common data layer, with the key information connected and easily accessible, giving each individual and team an unprecedented level of insight into bottlenecks and inefficiencies  dramatically improving the speed at which better software gets to users safely.
+Delivery Management is the process where all software, artifacts and data from disparate tools used to move a product or feature from initial idea to max adoption are integrated into a unified common data layer, with the key information connected and easily accessible, giving each individual and team an unprecedented level of insight into bottlenecks and inefficiencies dramatically improving the speed at which better software gets to users safely.
 
-In its full implementation, the Blockchain Automation Framework integrates the tools: Jira and Confluence for Delivery Management.
-Jira is the tool used to report and track new features, bugs/issues and releases.
-Confluence is the tool for sharing documentation, plans and meeting notes.
+As it is opensource and a hyperledger-labs project, the Blockchain Automation Framework integrates with GitHub for reporting and tracking new features, bugs/issues and releases. BAF uses ReadTheDocs for sharing documentation.
+In specific implementations, the Blockchain Automation Framework can be integrated with tools like Jira and Confluence.
+
 
 Presentation Services
 ---------------------
@@ -114,7 +116,7 @@ DLT Integration
 DLT integration refers to how the presentation services will talk to the DLT Platform. This will depend on the presentation service as such.
 
 The Blockchain Automation Framework provides a sample application :doc:`example/supplychain`, which uses Express Nodejs API as the integration layer to talk to the underlying DLT platform.
-Each DLT platform also enables this by providing SDKs or APIs themselves.
+Each DLT/Blockchain platform also enables this by providing SDKs or APIs themselves.
 
 Application Integration
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -134,7 +136,7 @@ Distributed Data Platforms
 --------------------------
 
 Distributed Data Platforms form the core of any distributed architecture solution. The Blockchain Automation Framework (BAF) aims to support both Distributed Ledgers and Distributed Databases. 
-BAF currently supports DLT Platforms: `Corda`_ and `Hyperledger Fabric`_.
+BAF currently supports DLT/Blockchain Platforms: `Corda`_, `Hyperledger Fabric`_, `Hyperledger Indy`_, `Hyperledger Besu`_, and `Quorum`_.
 
 Infrastructure Services
 -----------------------
@@ -145,7 +147,7 @@ Cloud Providers
 
 A Cloud Provider is a company that delivers cloud computing based services with features like scalibility and easy maintainance.
 
-The Blockchain Automation Framework currently supports AWS platform (EKS) with future scope of Azure (AKS) and Google Cloud Platform (GKE).
+The Blockchain Automation Framework is built on Kubernetes, so will run on any Cloud provider providing Kubernetes as a service; this includes private and hybrid clouds.
 
 Container Services
 ~~~~~~~~~~~~~~~~~~
@@ -176,6 +178,8 @@ Platform-Specific Reference Guides
 .. toctree::
    :maxdepth: 1
 
+   architectureref/corda-ent
+   architectureref/certificates_path_list_corda_ent
    architectureref/corda
    architectureref/certificates_path_list_corda
    architectureref/hyperledger-fabric
@@ -184,8 +188,12 @@ Platform-Specific Reference Guides
    architectureref/certificates_path_list_indy
    architectureref/quorum
    architectureref/certificates_path_list_quorum
+   architectureref/hyperledger-besu
+   architectureref/certificates_path_list_besu
 
 .. _Corda: https://docs.corda.net/
 .. _Hyperledger Fabric: https://hyperledger-fabric.readthedocs.io
 .. _Hashicorp Vault: https://www.vaultproject.io/
 .. _Hyperledger Indy: https://hyperledger-indy.readthedocs.io/en/latest/
+.. _Quorum: https://www.goquorum.com/
+.. _Hyperledger Besu: https://besu.hyperledger.org/en/stable/

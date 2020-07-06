@@ -19,8 +19,7 @@ Ansible playbooks contains a series of roles and tasks which run in sequential o
 ```
 
 For Quorum, the ansible roles and playbooks are located at `/platforms/quorum/configuration/`
-Some of the common roles and playbooks between Quorum, Hyperledger-Indy, Hyperledger-Fabric and R3-Corda are located at
-`/platforms/shared/configuration/`
+Some of the common roles and playbooks between Hyperledger-Fabric, Hyperledger-Indy, Hyperledger-Besu, R3 Corda and Quorum are located at `/platforms/shared/configurations/`
 
 --------
 
@@ -29,7 +28,7 @@ Some of the common roles and playbooks between Quorum, Hyperledger-Indy, Hyperle
 Roles in ansible are a combination of logically inter-related tasks.
 
 To deploy the quorum network, run the deploy-network.yaml in `blockchain-automation-framework\platforms\quorum\configuration\`
-The roles included in the file are as follows.
+The roles included in the file are as follows:
 
 ## **check/k8_component
 
@@ -311,7 +310,7 @@ Follow [Readme](https://github.com/hyperledger-labs/blockchain-automation-framew
 
 ## **deploy-network.yaml**
 
- This playbook deploys a DLT network on existing Kubernetes clusters. The Kubernetes clusters should already be created and the infomation to connect to the clusters be updated in the network.yaml file that is used as an input to this playbook. It calls the following roles.
+ This playbook deploys a DLT/Blockchain network on existing Kubernetes clusters. The Kubernetes clusters should already be created and the infomation to connect to the clusters be updated in the network.yaml file that is used as an input to this playbook. It calls the following roles.
 
 
 * create/namespace_serviceaccount
@@ -331,7 +330,7 @@ Follow [Readme](https://github.com/hyperledger-labs/blockchain-automation-framew
 
 ## **reset-network.yaml**
 
-This playbook deletes the DLT network on existing Kubernetes clusters which has been created using the Blockchain Automation Framework. It calls the following roles. THIS PLAYBOOK DELETES EVERYTHING, EVEN NAMESPACES and FLUX.
+This playbook deletes the DLT/Blockchain network on existing Kubernetes clusters which has been created using the Blockchain Automation Framework. It calls the following roles. THIS PLAYBOOK DELETES EVERYTHING, EVEN NAMESPACES and FLUX.
 
 * delete/vault_secrets
 * delete/flux_releases
