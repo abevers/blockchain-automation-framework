@@ -1,0 +1,69 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: storestoreconstellation
+  namespace: store-quo
+  annotations:
+    flux.weave.works/automated: "false"
+spec:
+  releaseName: storestoreconstellation
+  chart:
+    git: git@github.com:abevers/blockchain-automation-framework.git
+    ref: feature/helm3
+    path: platforms/quorum/charts/node_constellation
+  values:
+    replicaCount: 1
+    metadata:
+      namespace: store-quo
+      labels: 
+    images:
+      node: quorumengineering/quorum:2.5.0
+      alpineutils: adopblockchaincloud0502.azurecr.io/alpine-utils:1.0
+      constellation: quorumengineering/constellation:0.3.2
+    node:
+      name: store
+      status: default
+      consensus: ibft
+      subject: O=Store,OU=Store,L=40.73/-74/New York,C=US
+      mountPath: /etc/quorum/qdata
+      imagepullsecret: regcred
+      keystore: keystore_1
+      servicetype: ClusterIP
+      lock: true/false
+      ports:
+        rpc: 8546
+        raft: 50401
+        constellation: 8443
+        quorum: 21000
+    vault:
+      address: http://vault.internal.dev.aws.blockchaincloudpoc-develop.com:8200
+      secretprefix: secret/store-quo/crypto/store
+      serviceaccountname: vault-auth
+      keyname: quorum
+      tm_keyname: transaction
+      role: vault-role
+      authpath: quorumstore
+    genesis: ewogICAgImNvbmZpZyI6IHsKICAgICAgICAiY2hhaW5JZCI6IDEwLAogICAgICAgICJob21lc3RlYWRCbG9jayI6IDAsCiAgICAgICAgImVpcDE1MEJsb2NrIjogMCwKICAgICAgICAiZWlwMTUwSGFzaCI6ICIweDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAiLAogICAgICAgICJlaXAxNTVCbG9jayI6IDAsCiAgICAgICAgImVpcDE1OEJsb2NrIjogMCwKICAgICAgICAiYnl6YW50aXVtQmxvY2siOiAxLAogICAgICAgICJjb25zdGFudGlub3BsZUJsb2NrIjogMCwKICAgICAgICAiaXN0YW5idWwiOiB7CiAgICAgICAgICAgICJlcG9jaCI6IDMwMDAwLAogICAgICAgICAgICAicG9saWN5IjogMCwKICAgICAgICAgICAgImNlaWwyTmJ5M0Jsb2NrIjogMAogICAgICAgIH0sCiAgICAgICAgInR4blNpemVMaW1pdCI6IDEyOCwKICAgICAgICAibWF4Q29kZVNpemUiOiAxMjgsCiAgICAgICAgImlzUXVvcnVtIjogdHJ1ZQogICAgfSwKICAgICJub25jZSI6ICIweDAiLAogICAgInRpbWVzdGFtcCI6ICIweDVmMDJlZDE2IiwKICAgICJleHRyYURhdGEiOiAiMHgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwZjg5YWY4NTQ5NDBmNGFlNGYwODBkZTNmODZhNTllOWZlYTBjNzFjNTA1N2E0M2M1YTA5NDYxNmQ5OWY3M2NiYmFkZDE2MDBhN2VjNGRjYTZmMWI4ZGNmMTljODQ5NDA5MDk3MmVhOWEyNjJkNzc0NWM5MTk1ODgxZWRlMzVmZjFiOGJkNTQ5NGNhOGM1NDFiNjI0NzQzOWFkMzFiNzc1NWQxNDFhNmZmNThjYTliZmZiODQxMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMGMwIiwKICAgICJnYXNMaW1pdCI6ICIweGUwMDAwMDAwIiwKICAgICJkaWZmaWN1bHR5IjogIjB4MSIsCiAgICAibWl4SGFzaCI6ICIweDYzNzQ2OTYzNjE2YzIwNjI3OTdhNjE2ZTc0Njk2ZTY1MjA2NjYxNzU2Yzc0MjA3NDZmNmM2NTcyNjE2ZTYzNjUiLAogICAgImNvaW5iYXNlIjogIjB4MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCIsCiAgICAiYWxsb2MiOiB7CiAgICAgICAgIjA5MDk3MmVhOWEyNjJkNzc0NWM5MTk1ODgxZWRlMzVmZjFiOGJkNTQiOiB7CiAgICAgICAgICAgICJiYWxhbmNlIjogIjB4NDQ2YzNiMTVmOTkyNjY4N2QyYzQwNTM0ZmRiNTY0MDAwMDAwMDAwMDAwIgogICAgICAgIH0sCiAgICAgICAgIjBmNGFlNGYwODBkZTNmODZhNTllOWZlYTBjNzFjNTA1N2E0M2M1YTAiOiB7CiAgICAgICAgICAgICJiYWxhbmNlIjogIjB4NDQ2YzNiMTVmOTkyNjY4N2QyYzQwNTM0ZmRiNTY0MDAwMDAwMDAwMDAwIgogICAgICAgIH0sCiAgICAgICAgIjYxNmQ5OWY3M2NiYmFkZDE2MDBhN2VjNGRjYTZmMWI4ZGNmMTljODQiOiB7CiAgICAgICAgICAgICJiYWxhbmNlIjogIjB4NDQ2YzNiMTVmOTkyNjY4N2QyYzQwNTM0ZmRiNTY0MDAwMDAwMDAwMDAwIgogICAgICAgIH0sCiAgICAgICAgImNhOGM1NDFiNjI0NzQzOWFkMzFiNzc1NWQxNDFhNmZmNThjYTliZmYiOiB7CiAgICAgICAgICAgICJiYWxhbmNlIjogIjB4NDQ2YzNiMTVmOTkyNjY4N2QyYzQwNTM0ZmRiNTY0MDAwMDAwMDAwMDAwIgogICAgICAgIH0KICAgIH0sCiAgICAibnVtYmVyIjogIjB4MCIsCiAgICAiZ2FzVXNlZCI6ICIweDAiLAogICAgInBhcmVudEhhc2giOiAiMHgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwIgp9
+    staticnodes: 
+      [
+    "enode://3f98acb417877ec1d8b716cb680550b169e6227754f7fc55b60697e90d46ac289c873b1a26f7a3dbba2525651568fd646aba736e0ab0f0d586dd66d4b3d528f6@carrier.test.quorum.blockchaincloudpoc.com:15010?discport=0",
+    "enode://b8447c88b7d900b2d1551e51240085c0fe1adbbcc19528ea7e8b669bb91d8877ea4b7d57f7c1806707e5404076eb4abcad45b2863f8917c099d5d7f38d7994c0@manufacturer.test.quorum.blockchaincloudpoc.com:15020?discport=0",
+    "enode://a91bedc8e3fe7e3bd591481929b67b72d74c1d4306e2a4463c97ce9ae0748bdcf7f3d4418677ec377ef17d09c96b8a2dc48f63bae7c233f0b9b497f303f3a4d1@store.test.quorum.blockchaincloudpoc.com:15030?discport=0",
+    "enode://72894367d06308486ced1c03b69db8dc46f7fedbf344017cab4e4a06a8edbe90b494e7ef0ace52a70829a3375eee13618f95a2f6a15319ef4842d69d108aa7b6@warehouse.test.quorum.blockchaincloudpoc.com:15040?discport=0"
+]
+    constellation:
+      url: https://store.test.quorum.blockchaincloudpoc.com:8443/
+      storage: "bdb:/etc/quorum/qdata/database"
+      tls: "strict"
+      othernodes: ['https://carrier.test.quorum.blockchaincloudpoc.com:8443', 'https://manufacturer.test.quorum.blockchaincloudpoc.com:8443', 'https://store.test.quorum.blockchaincloudpoc.com:8443', 'https://warehouse.test.quorum.blockchaincloudpoc.com:8443']
+      trust: "tofu"
+    proxy:
+      provider: "ambassador"
+      external_url_suffix: test.quorum.blockchaincloudpoc.com
+      rpcport: 15031
+      quorumport: 15030
+      portConst: 8443
+      portRaft: 15033
+    storage:
+      storageclassname: awsstorageclass
+      storagesize: 1Gi
