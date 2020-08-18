@@ -37,7 +37,6 @@
     loop: "{{ network['organizations'] }}"
     loop_control:
       loop_var: org
-
   # ----------------------------------------------------------------------  
   # Setup Vault-Kubernetes accesses and Regcred for docker registry
   - name: "Setup vault"   
@@ -54,6 +53,7 @@
     loop: "{{ network['organizations'] }}"
     loop_control:
       loop_var: org
+
   # ---------------------------------------------------------------------- 
   # Generate pki-generator chart value file and push to repository
   - name: "Setup pki-generator"   
@@ -63,6 +63,7 @@
     loop_control:
       loop_var: org
     when: org.type == 'cenm'
+
   # ----------------------------------------------------------------------   
   # Deploy Signer node
   - name: Deploy Signer service node
@@ -72,6 +73,13 @@
     loop_control:
       loop_var: org
     when: org.type == 'cenm'
+
+  # ----------------------------------------------------------------------   
+  # Get networkroottruststore
+  - name: Fetch networkroottruststore from the vault
+    include_role:
+      name: setup/networkroottruststore
+
   # ----------------------------------------------------------------------   
   # Create ambassador certificates for idman
   - name: Create ambassador certificates for idman
@@ -81,6 +89,7 @@
     loop_control:
       loop_var: org
     when: org.type == 'cenm'
+
   # ----------------------------------------------------------------------   
   # Create ambassador certificates for nmap
   - name: Create ambassador certificates for nmap
@@ -90,6 +99,7 @@
     loop_control:
       loop_var: org
     when: org.type == 'cenm'
+
   # ----------------------------------------------------------------------   
   # Create ambassador certificates for notary
   - name: Create ambassador certificates for notary
@@ -99,6 +109,7 @@
     loop_control:
       loop_var: org
     when: org.type == 'cenm'
+
   # ----------------------------------------------------------------------   
   # Create value file for idman
   - name: Create value file for idman
@@ -108,6 +119,7 @@
     loop_control:
       loop_var: org
     when: org.type == 'cenm'
+
   # ----------------------------------------------------------------------   
   # Create value file for notary-initial-registration 
   - name: Create value file for notary registration job
@@ -117,6 +129,7 @@
     loop_control:
       loop_var: org
     when: org.type == 'cenm'
+
   # ----------------------------------------------------------------------   
   # Create value file for nmap
   - name: Create value file for nmap
@@ -126,6 +139,7 @@
     loop_control:
       loop_var: org
     when: org.type == 'cenm'
+
   # ----------------------------------------------------------------------   
   # Create value file for notary 
   - name: Create value file for notary
@@ -135,3 +149,33 @@
     loop_control:
       loop_var: org
     when: org.type == 'cenm'
+
+  # ----------------------------------------------------------------------   
+  # Create value file for node registration
+  - name: Create value file for node registration
+    include_role:
+      name: setup/node_registration
+    loop: "{{ network['organizations'] }}"
+    loop_control:
+      loop_var: org
+    when: org.type == 'node'
+
+  # ----------------------------------------------------------------------   
+  # Create value file for bridge 
+  - name: Create value file for bridge
+    include_role:
+      name: setup/bridge
+    loop: "{{ network['organizations'] }}"
+    loop_control:
+      loop_var: org
+    when: org.type == 'node'
+
+  # ----------------------------------------------------------------------   
+  # Create value file for float 
+  - name: Create value file for float
+    include_role:
+      name: setup/float
+    loop: "{{ network['organizations'] }}"
+    loop_control:
+      loop_var: org
+    when: org.type == 'node'
