@@ -1,0 +1,73 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: notaryab
+  namespace: cenmab-ent
+  annotations:
+    flux.weave.works/automated: "false"
+spec:
+  releaseName: notaryab
+  chart:
+    git: git@github.com:abevers/blockchain-automation-framework.git
+    ref: bug/938-multiple-network
+    path: platforms/corda-ent/charts/notary
+  values:
+    nodeName: notaryab
+    legalName: O=Notary,OU=Notary1,L=London,C=GB
+    metadata:
+      namespace: cenmab-ent
+    dockerImage:
+      name: corda/notary:1.2-zulu-openjdk8u242
+      pullPolicy: Always
+    acceptLicense: YES
+    storage:
+      name: cenmsc
+    replicas: 1
+    image:
+      initContainerName: index.docker.io/hyperledgerlabs/alpine-utils:1.0
+      imagepullSecret: regcred
+    cordaJarMx: 3
+    devMode: false
+    rpcSettingsAddress: "0.0.0.0"
+    rpcSettingsAddressPort: 10003
+    rpcSettingsAdminAddress: "localhost"
+    rpcSettingsAdminAddressPort: 10770
+    rpcSettingsStandAloneBroker: false
+    rpcSettingsUseSsl: false
+    networkServices:
+      doormanURL: http://idmanab.cenmab-ent:10000
+      networkMapURL: http://networkmapab.cenmab-ent:10000
+    dataSourceProperties:
+      dataSource:
+        password: "notaryab-db-password"
+        url: "jdbc:h2:tcp://notaryabdb:9101/persistence;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=10000;WRITE_DELAY=100;AUTO_RECONNECT=TRUE;"
+        user: "notaryab-db-user"
+      dataSourceClassName: "org.h2.jdbcx.JdbcDataSource"
+      dbUrl: "notaryabdb"
+      dbPort: 9101
+    vault:
+      authpath: cordaentcenmab
+      address: http://vault.internal.dev2.aws.blockchaincloudpoc-develop.com:20001
+      serviceaccountname: vault-auth
+      role: vault-role
+      certsecretprefix: secret/cenmab
+    notary:
+      validating: True
+    rpcUsers:
+      username: notaryab
+      password: notaryabP
+    notaryPublicIP: notaryab.rc.dev2.aws.blockchaincloudpoc-develop.com
+    sleepTimeAfterError: 120
+    sleepTime: 0
+    jarPath: bin
+    configPath: etc
+    healthCheckNodePort: 0
+    bashDebug: false
+    volume:
+      baseDir: /opt/corda
+    service:
+      p2pPort: 10002
+      sshdPort: 2222
+    healthcheck:
+      readinesscheckinterval: 10
+      readinessthreshold: 15
