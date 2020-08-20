@@ -23,8 +23,8 @@ spec:
       pullPolicy: Always
     acceptLicence: true
     networkServices:
-      doormanURL: https://idmanab.rc.dev.aws.blockchaincloudpoc-develop.com:8443
-      networkMapURL: https://networkmapab.rc.dev.aws.blockchaincloudpoc-develop.com:8443
+      doormanURL: http://idman.cenmab-ent:10000
+      networkMapURL: http://networkmap.cenmab-ent:10000
     vault:
       address: http://vault.internal.dev2.aws.blockchaincloudpoc-develop.com:20001
       role: vault-role
