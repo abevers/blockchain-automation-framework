@@ -1,0 +1,63 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: cenmabidman
+  namespace: cenmab-ent
+  annotations:
+    flux.weave.works/automated: "false"
+spec:
+  releaseName: cenmabidman
+  chart:
+    git: git@github.com:abevers/blockchain-automation-framework.git
+    ref: bug/938-multiple-network
+    path: platforms/corda-ent/charts/idman
+  values:
+    nodeName: idmanab
+    metadata:
+      namespace: cenmab-ent
+    storage:
+      name: cenmsc
+    replicas: 1
+    image:
+      initContainerName: adopblockchaincloud0502.azurecr.io/alpine-utils:1.0
+      imagepullsecret: regcred
+    dockerImage:
+      name: corda/enterprise-identitymanager
+      tag: 1.2-zulu-openjdk8u242
+      pullPolicy: Always
+      imagePullSecret: regcred
+    acceptLicense: YES
+    vault:
+      address: http://vault.internal.dev2.aws.blockchaincloudpoc-develop.com:20001
+      certsecretprefix: secret/cenmab
+      role: vault-role
+      authpath: cordaentcenmab
+      serviceaccountname: vault-auth
+    ambassador:
+      external_url_suffix: rc.dev2.aws.blockchaincloudpoc-develop.com
+    volume:
+      baseDir: /opt/corda
+    service:
+      port: 10000
+    serviceInternal:
+      port: 5052
+    serviceRevocation:
+      port: 5053
+    shell:
+      sshdPort: 2222
+      user: idmanab
+      password: idmanabP
+    database:
+      driverClassName: "org.h2.Driver"
+      url: "jdbc:h2:file:./h2/identity-manager-persistence;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=10000;WRITE_DELAY=0;AUTO_SERVER_PORT=0"
+      user: idmanab-db-user
+      password: idmanab-db-password
+      runMigration: "true"
+    cordaJarMx: 1
+    healthCheckNodePort: 0
+    jarPath: bin
+    configPath: etc
+    sleepTimeAfterError: 120
+    healthcheck:
+      readinesscheckinterval: 10
+      readinessthreshold: 15
