@@ -1,0 +1,57 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: bridge
+  namespace: carrierab-ent
+  annotations:
+    flux.weave.works/automated: "false"
+spec:
+  releaseName: bridge
+  chart:
+    git: "git@github.com:abevers/blockchain-automation-framework.git"
+    ref: bug/938-multiple-network
+    path: platforms/corda-ent/charts/idman
+  values:
+    deployment:
+      annotations: {}
+    nodeName: bridge
+    nmap:
+      name: networkmapab
+      port: 10000
+      namespace: cenmab-ent
+    metadata:
+      namespace: carrierab-ent
+      labels: {}
+    replicas: 1
+    initContainerImage:
+      name: "adopblockchaincloud0502.azurecr.io/alpine-utils:1.0"
+    image:
+      name: "adopblockchaincloud0502.azurecr.io/corda_image_firewall_4.4:latest"
+      pullsecret: regcred
+      pullPolicy: Always
+    vault:
+      address: "http://vault.internal.dev2.aws.blockchaincloudpoc-develop.com:20001"
+      role: vault-role
+      authpath: cordaentcarrierab
+      serviceaccountname: vault-auth
+      certsecretprefix: secret/carrierab
+    volume:
+      baseDir: /opt/corda
+    storage:
+      name: cenmsc
+    pvc:
+      annotations: {}
+    cordaJarMx: 1
+    healthCheckNodePort: 0
+    healthcheck:
+      readinesscheckinterval: 10
+      readinessthreshold:: 15
+    float:
+      address: "float.carrierab-ent"
+      port: 39999
+      subject: "CN=Float Local,O=Local Only,L=London,C=GB"
+    node:
+      messagingServerAddress: bridge.carrierab-ent
+      messagingServerPort: 40000
+    tunnel:
+      port: 40000
