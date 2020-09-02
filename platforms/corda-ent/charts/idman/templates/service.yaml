@@ -31,9 +31,9 @@ metadata:
 spec:
   selector:
     app: {{ .Values.nodeName }}
-# we need healthCheckNodePort set to get rid of logs pollution
-{{- if (.Values.healthCheckNodePort) }}
-  healthCheckNodePort: {{ .Values.healthCheckNodePort }}
+# we need Health Check node port set to get rid of logs pollution
+{{- if (.Values.healthCheck.nodePort) }}
+  healthCheckNodePort: {{ .Values.healthCheck.nodePort }}
 {{- end }}
   ports:
     - port: {{ .Values.serviceInternal.port }}

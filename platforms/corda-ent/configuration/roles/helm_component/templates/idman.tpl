@@ -15,28 +15,20 @@ spec:
     nodeName: {{ node_name }}
     metadata:
       namespace: {{ component_ns }}
-    storage:
-      name: {{ storageclass }}
-    replicas: 1
     image:
       initContainerName: {{ init_container_name }}
-      imagepullsecret: {{ image_pull_secret }}
-    dockerImage:
-      name: {{ idman_image_name }}
-      tag: {{ idman_image_tag }}
+      idmanContainerName: {{ idman_image_name }}:{{ idman_image_tag }}
       pullPolicy: Always
       imagePullSecret: {{ image_pull_secret }}
+    storage:
+      name: {{ storageclass }}
     acceptLicense: YES
     vault:
       address: {{ vault_addr }}
-      certsecretprefix: {{ vault_cert_secret_prefix }}
+      certSecretPrefix: {{ vault_cert_secret_prefix }}
       role: {{ vault_role }}
-      authpath: {{ auth_path }}
-      serviceaccountname: {{ vault_serviceaccountname }}
-    ambassador:
-      external_url_suffix: {{ external_url_suffix }}
-    volume:
-      baseDir: /opt/corda
+      authPath: {{ auth_path }}
+      serviceAccountName: {{ vault_serviceaccountname }}
     service:
       port: {{ idman_port }}
     serviceInternal:
@@ -53,11 +45,16 @@ spec:
       user: {{ db_username }}
       password: {{ db_password }}
       runMigration: "true"
-    cordaJarMx: 1
-    healthCheckNodePort: 0
+    volume:
+      baseDir: /opt/corda
     jarPath: bin
     configPath: etc
+    cordaJarMx: 1
+    replicas: 1
     sleepTimeAfterError: 120
-    healthcheck:
-      readinesscheckinterval: 10
-      readinessthreshold: 15
+    healthCheck:
+      readinessCheckInterval: 10
+      readinessThreshold: 15
+      nodePort: 0
+    ambassador:
+      external_url_suffix: {{ external_url_suffix }}

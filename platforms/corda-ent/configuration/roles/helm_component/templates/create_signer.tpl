@@ -17,42 +17,30 @@ spec:
       namespace: {{ component_ns }}
     replicas: 1
     image:
+      initContainerName: {{ network.docker.url }}/alpine-utils:1.0
+      signerContainerName: {{ network.docker.url }}/corda/enterprise-signer:1.2-zulu-openjdk8u242
       imagePullSecret: regcred
-      initContainerName: index.docker.io/hyperledgerlabs/alpine-utils:1.0
-    storage:
-      name: cordaentsc
-    dockerImageSigner:
-      name: corda/enterprise-signer
-      tag: 1.2-zulu-openjdk8u242
       pullPolicy: Always
     acceptLicense: YES
     vault:
       address: {{ vault.url }}
       role: vault-role
-      authpath: {{ component_auth }}
-      serviceaccountname: vault-auth
-      certsecretprefix: secret/{{ org.name | lower }}
-    healthcheck:
-      readinesscheckinterval: 10
-      readinessthreshold: 15
+      authPath: {{ component_auth }}
+      serviceAccountName: vault-auth
+      certSecretPrefix: secret/{{ org.name | lower }}
     serviceSsh:
       port: 2222
       targetPort: 2222
       type: ClusterIP
-    service:
-      type: ClusterIP
-      port: 20003
-    volume:
-      baseDir: /opt/corda
     shell:
       user: signer
       password: signerP
-    idmanPublicIP: {{ org.services.idman.name }}.{{ org.external_url_suffix }}
-    idmanPort: 8443
     serviceLocations:
       identityManager:
         host: {{ org.services.idman.name }}.{{ org.name | lower }}-ent
+        publicIp: {{ org.services.idman.name }}.{{ org.external_url_suffix }}
         port: 5052
+        publicPort: 8443
       networkMap:
         host: {{ org.services.networkmap.name }}.{{ org.name | lower }}-ent
         port: 5050
@@ -71,7 +59,12 @@ spec:
       NetworkParameters:
         schedule:
           interval: 1m
-    cordaJarMx: 1
-    healthCheckNodePort: 0
+    volume:
+      baseDir: /opt/corda
     jarPath: bin
     configPath: etc
+    cordaJarMx: 1
+    healthCheck:
+      readinessCheckInterval: 10
+      readinessThreshold: 15
+      nodePort: 0

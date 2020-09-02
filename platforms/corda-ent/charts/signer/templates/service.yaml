@@ -13,8 +13,8 @@ spec:
   selector:
     app: {{ .Values.nodeName }}
 # we need Local policy and healthCheckNodePort set to get rid of logs pollution
-{{- if (.Values.healthCheckNodePort) }}
-  healthCheckNodePort: {{ .Values.healthCheckNodePort }}
+{{- if (.Values.healthCheck.nodePort) }}
+  healthCheckNodePort: {{ .Values.healthCheck.nodePort }}
 {{- end }}
   type: {{ .Values.serviceSsh.type }}
   ports:
