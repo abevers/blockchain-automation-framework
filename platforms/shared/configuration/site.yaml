@@ -32,8 +32,6 @@
 # Reseting the network
   - import_playbook: "{{ playbook_dir }}/../../r3-corda/configuration/reset-network.yaml"
     when: network.type == 'corda' and reset is defined and reset == 'true'
-  - import_playbook: "{{ playbook_dir }}/../../corda-ent/configuration/reset-network.yaml"
-    when: network.type == 'corda-enterprise' and reset is defined and reset == 'true'
   - import_playbook: "{{ playbook_dir }}/../../hyperledger-fabric/configuration/reset-network.yaml"
     when: network.type == 'fabric' and reset is defined and reset == 'true'
   - import_playbook: "{{ playbook_dir }}/../../hyperledger-indy/configuration/cleanup.yaml"

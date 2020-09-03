@@ -40,6 +40,9 @@ storage:
   # this chart doesn't create the storageclass.
   # Eg. name: cenm
   name:
+  # Provide the memory size for the storage class.
+  # Eg. memory: 64Mi
+  memory:
 
 # Required parameter to start any .jar files
 # Eg. acceptLicense: YES 
@@ -74,32 +77,29 @@ vault:
 #                    Idman Configuration                    #
 #############################################################
 
-# Idman 'main' service
 service:
-  # Eg. port: 10000
-  port: 
-
-# Internal service, inside the K8s cluster
-serviceInternal:
-  # Eg. port: 5052
-  port: 
-
-# Certificate Revocation Authority (CRA) service, inside the K8s cluster
-serviceRevocation:
-  # Eg. port: 5053
-  port: 
-
-# Provide the service details for setting up Shell access to the service.
-shell:
-  # Te port to use for the SSH service
-  # Eg. sshdPort: 2222
-  sshdPort: 
-  # SSH username
-  # Eg. user: idman
-  user: 
-  # SSH password
-  # Eg. password:"idmanP
-  password:
+  # Idman 'main' service
+  external: 
+    # Eg. port: 10000
+    port: 
+  # Internal service, inside the K8s cluster
+  internal:
+    # Eg. port: 5052
+    port: 
+  revocation:
+    # Eg. port: 5053
+    port: 
+  # Provide the service details for setting up Shell access to the service.
+  shell:
+    # Te port to use for the SSH service
+    # Eg. sshdPort: 2222
+    sshdPort: 
+    # SSH username
+    # Eg. user: idman
+    user: 
+    # SSH password
+    # Eg. password:"idmanP
+    password:
 
 #############################################################
 #                Database Options and Configuration         #
@@ -126,42 +126,61 @@ database:
 #############################################################
 #                       Settings                            #
 #############################################################
-# Provide volume related specifications
-volume:
-  # Eg. baseDir: /opt/corda
-  baseDir: 
+config:
+  # Provide volume related specifications
+  volume:
+    # Eg. baseDir: /opt/corda
+    baseDir: 
 
-# Provide the path where the CENM Idman .jar-file is stored
-# Eg. jarPath: bin
-jarPath: 
+  # Provide the path where the CENM Idman .jar-file is stored
+  # Eg. jarPath: bin
+  jarPath: 
 
-# Provide the path where the CENM Service configuration files are stored
-# Eg. configPath: etc
-configPath: 
+  # Provide the path where the CENM Service configuration files are stored
+  # Eg. configPath: etc
+  configPath: 
 
-# Provide any extra annotations for the PVCs
-pvc:
-  #   annotations:
-  #     key: "value"
-  annotations: {}
+  # Provide any extra annotations for the PVCs
+  pvc:
+    #   annotations:
+    #     key: "value"
+    annotations: {}
 
-# Provide any extra annotations for the deployment
-deployment:
-  #   annotations:
-  #     key: "value"
-  annotations: {}
+  # Provide any extra annotations for the deployment
+  deployment:
+    #   annotations:
+    #     key: "value"
+    annotations: {}
 
-# Specify the maximum size of the memory allocation pool
-# Eg. cordaJarMx: 1
-cordaJarMx: 
+  # Specify the maximum size of the memory allocation pool
+  cordaJar:
+    # Provide the memory size.
+    # Eg. memorySize: 4096 (if using kilobytes)
+    # Eg. memorySize: 512 (if using megabytes)
+    # Eg. memorySize: 1 (if using gigabytes) 
+    memorySize:
+    # Provide the unit of greatness for the size, one of three options:
+    # - k or K for kilobytes
+    # - m or M for megabytes
+    # - g or G for gigabytes
+    # Eg. unit: M 
+    unit:
+    # Set limits of .jar  
+    resources:
+      # Provide the limit memory for node
+      # Eg. limits: 512M
+      limits:
+      # Provide the requests memory for node
+      # Eg. requests: 550M
+      requests: 
 
-# Provide the number of replicas for your pods
-# Eg. replicas: 1
-replicas:
+  # Provide the number of replicas for your pods
+  # Eg. replicas: 1
+  replicas:
 
-# Sleep time in seconds, occurs after any error is encountered in start-up
-# Eg. 120
-sleepTimeAfterError:
+  # Sleep time in seconds, occurs after any error is encountered in start-up
+  # Eg. 120
+  sleepTimeAfterError:
 
 # Values    
 healthCheck:
@@ -174,4 +193,3 @@ healthCheck:
   # Health Check node port set to get rid of logs pollution
   # Eg. nodePort: 0
   nodePort: 
-  

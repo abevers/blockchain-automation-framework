@@ -4,9 +4,9 @@ kind: Deployment
 metadata:
   name: {{ .Values.nodeName }}
   namespace: {{ .Values.metadata.namespace }}
-  {{- if .Values.deployment.annotations }}
+  {{- if .Values.config.deployment.annotations }}
   annotations:
-{{ toYaml .Values.deployment.annotations | indent 8 }}
+{{ toYaml .Values.config.deployment.annotations | indent 8 }}
     {{- end }}
   labels:
     app.kubernetes.io/name: {{ .Values.nodeName }}
@@ -14,7 +14,7 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
-  replicas: {{ .Values.replicas }}
+  replicas: {{ .Values.config.replicas }}
   selector:
     matchLabels:
       app: {{ .Values.nodeName }}
@@ -62,20 +62,20 @@ spec:
               echo "Logged into Vault"
                
               COUNTER=1
-              while [ "$COUNTER" -lt {{ $.Values.healthCheck.readinessThreshold }} ]
+              while [ "$COUNTER" -lt {{ $.Values.vault.retries }} ]
               do
                   # Get keystores from Vault, to see if the certificates are created and have been put in Vault
                   LOOKUP_SECRET_RESPONSE=$(curl -sS --header "X-Vault-Token: ${VAULT_TOKEN}" ${VAULT_ADDR}/v1/${CERTS_SECRET_PREFIX}/{{ $.Values.nodeName }}/certs | jq -r 'if .errors then . else . end')
                   if echo ${LOOKUP_SECRET_RESPONSE} | grep "errors"
                   then
-                    sleep {{ $.Values.healthCheck.readinessCheckInterval }}
+                    sleep {{ $.Values.vault.sleepTimeAfterError }}
                   else
                     break
                   fi 
                   COUNTER=`expr "$COUNTER" + 1`
               done
 
-              if [ "$COUNTER" -ge {{ $.Values.healthCheck.readinessThreshold }} ]
+              if [ "$COUNTER" -ge {{ $.Values.vault.retries }} ]
               then
                 # printing number of trial done before giving up
                 echo "Certificates might not have been put in Vault. Giving up after $COUNTER tries!"
@@ -93,7 +93,7 @@ spec:
            - name: VAULT_APP_ROLE
              value: {{ $.Values.vault.role }}
            - name: BASE_DIR
-             value: {{ $.Values.volume.baseDir }}
+             value: {{ $.Values.config.volume.baseDir }}
            - name: CERTS_SECRET_PREFIX
              value: {{ .Values.vault.certSecretPrefix }}
            - name: MOUNT_PATH
@@ -152,7 +152,7 @@ spec:
         args:
         - |-
           cp CM-FILES/signer.conf etc/signer.conf;
-          java -Xmx{{ .Values.cordaJarMx }}G -jar {{ .Values.jarPath }}/signer.jar --config-file {{ .Values.configPath }}/signer.conf
+          java -Xmx{{ .Values.cordaJar.memorySize }}{{ .Values.cordaJar.unit }} -jar {{ .Values.config.jarPath }}/signer.jar --config-file {{ .Values.config.configPath }}/signer.conf
         volumeMounts:
         - name: signer-conf
           mountPath: /opt/corda/CM-FILES/signer.conf
@@ -165,9 +165,9 @@ spec:
           mountPath: /opt/corda/DATA
         resources:
           requests:
-            memory: {{ .Values.cordaJarMx }}G
+            memory: {{ .Values.cordaJar.resources.requests}}
           limits:
-            memory: {{ add .Values.cordaJarMx 2 }}G
+            memory: {{ .Values.cordaJar.resources.limits}}
       - name: logs
         image: "{{ required "signer[main]: missing value for .Values.iamage.signerContainerName" .Values.image.signerContainerName }}"
         env:

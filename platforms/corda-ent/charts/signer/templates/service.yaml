@@ -24,4 +24,3 @@ spec:
       {{- if .Values.serviceSsh.nodePort }}
       nodePort: {{ .Values.serviceSsh.nodePort }}
       {{- end }}
- 

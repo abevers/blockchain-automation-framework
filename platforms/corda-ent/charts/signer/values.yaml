@@ -61,6 +61,12 @@ vault:
   # Provide the vault path where the  certificates are stored
   # Eg. certsecretprefix: secret/cenm-org-name/signer/certs
   certSecretPrefix:
+  # The amount of times to retry fetching from/writing to Vault before giving up.
+  # Eg. retries: 10
+  retries:
+  # The amount of time in seconds to wait after an error occurs when fetching from/writing to Vault.
+  # Eg. sleepTimeAfterError: 15  
+  sleepTimeAfterError:
 
 
 #############################################################
@@ -68,28 +74,28 @@ vault:
 #############################################################
 
 # Provide the service details for setting up ssh
-serviceSsh:
-  # The type of the SSH service (among such ClusterIP, NodePort)
-  # Eg. type: ClusterIP
-  type:
-  # The port where the SSH service is running inside the cluster
-  # Eg. port: 2222
-  port:
-  # The port where the SSH service will be mapped to, to be accessed outside of the cluster.
-  # Eg. targetPort: 2222
-  targetPort:
-  # If filled, will set the SSH service to type NodePort.
-  # Eg. nodePort: 2223
-  nodePort:
-
-# Provide the service details for setting up Shell access to the service.
-shell:
-  # SSH username
-  # Eg. user: signer
-  user:
-  # SSH password
-  # Eg. password: signerP
-  password:
+service:
+  ssh:
+    # The type of the SSH service (among such ClusterIP, NodePort)
+    # Eg. type: ClusterIP
+    type:
+    # The port where the SSH service is running inside the cluster
+    # Eg. port: 2222
+    port:
+    # The port where the SSH service will be mapped to, to be accessed outside of the cluster.
+    # Eg. targetPort: 2222
+    targetPort:
+    # If filled, will set the SSH service to type NodePort.
+    # Eg. nodePort: 2223
+    nodePort:
+  # Provide the service details for setting up Shell access to the service.
+  shell:
+    # SSH username
+    # Eg. user: signer
+    user:
+    # SSH password
+    # Eg. password: signerP
+    password:
 
 # provide the other cenm services details
 serviceLocations:
@@ -147,39 +153,52 @@ signers:
 #                       Settings                            #
 #############################################################
 # Provide volume related specifications
-volume:
- # Eg. baseDir: /opt/corda
-  baseDir:
+config:
+  volume:
+  # Eg. baseDir: /opt/corda
+    baseDir:
 
-# Provide the path where the CENM Signer .jar-file is stored
-# Eg. jarPath: bin
-jarPath:
+  # Provide the path where the CENM Signer .jar-file is stored
+  # Eg. jarPath: bin
+  jarPath:
 
-# Provide the path where the CENM Service configuration files are stored
-# Eg. configPath: etc
-configPath:
+  # Provide the path where the CENM Service configuration files are stored
+  # Eg. configPath: etc
+  configPath:
 
-# Provide any extra annotations for the deployment
-deployment:
-  #   annotations:
-  #     key: "value"
-  annotations: {}
+  # Provide any extra annotations for the deployment
+  deployment:
+    #   annotations:
+    #     key: "value"
+    annotations: {}
 
-# Specify the maximum size of the memory allocation pool
-# Eg. cordaJarMx: 1
-cordaJarMx:
+  # Provide configuration of the .jar files used in the Node
+  cordaJar:
+    # Provide the memory size.
+    # Eg. memorySize: 4096 (if using kilobytes)
+    # Eg. memorySize: 512 (if using megabytes)
+    # Eg. memorySize: 1 (if using gigabytes) 
+    memorySize:
+    # Provide the unit of greatness for the size, one of three options:
+    # - k or K for kilobytes
+    # - m or M for megabytes
+    # - g or G for gigabytes
+    # Eg. unit: M
+    unit:
+    # Set limits of .jar  
+    resources:
+      # Provide the limit memory for node
+      # Eg. limits: 512M
+      limits:
+      # Provide the requests memory for node
+      # Eg. requests: 550M
+      requests:
 
-# Provide the number of replicas for your pods
-# Eg. replicas: 1
-replicas:
+  # Provide the number of replicas for your pods
+  # Eg. replicas: 1
+  replicas:
 
 healthCheck:
-  # Provide the interval in seconds you want to iterate till db to be ready
-  # Eg. readinessCheckinterval: 10
-  readinessCheckInterval: 
-  # Provide the threshold till you want to check if specified db up and running
-  # Eg. readinessThreshold: 15
-  readinessThreshold:
   # Health Check node port set to get rid of logs pollution
   # Eg. nodePort: 0
   nodePort: 

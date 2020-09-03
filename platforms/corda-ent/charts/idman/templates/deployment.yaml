@@ -4,9 +4,9 @@ kind: Deployment
 metadata:
   name: {{ .Values.nodeName }}
   namespace: {{ .Values.metadata.namespace }}
-  {{- if .Values.deployment.annotations }}
+  {{- if .Values.config.deployment.annotations }}
   annotations:
-{{ toYaml .Values.deployment.annotations | indent 8 }}
+{{ toYaml .Values.config.deployment.annotations | indent 8 }}
     {{- end }}
   labels:
     app.kubernetes.io/name: {{ .Values.nodeName }}
@@ -14,7 +14,7 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
-  replicas: {{ .Values.replicas }}
+  replicas: {{ .Values.config.replicas }}
   selector:
     matchLabels:
       app: {{ .Values.nodeName }}
@@ -44,7 +44,7 @@ spec:
           - name: VAULT_APP_ROLE
             value: {{ $.Values.vault.role }}
           - name: BASE_DIR
-            value: {{ $.Values.volume.baseDir }}
+            value: {{ $.Values.config.volume.baseDir }}
           - name: CERTS_SECRET_PREFIX
             value: {{ .Values.vault.certSecretPrefix }}
           - name: MOUNT_PATH
@@ -185,9 +185,9 @@ spec:
           mountPath: /opt/corda/DATA
         resources:
           requests:
-            memory: {{ .Values.cordaJarMx }}G
+            memory: {{ .Values.cordaJar.resources.requests}}
           limits:
-            memory: {{ add .Values.cordaJarMx 2 }}G
+            memory: {{ .Values.cordaJar.resources.limits}}
       - name: logs
         image: "{{ required "idman[logs]: missing value for .Values.image.idmanContainerName" .Values.image.idmanContainerName }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
