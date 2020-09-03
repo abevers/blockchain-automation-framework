@@ -152,7 +152,7 @@ spec:
         args:
         - |-
           cp CM-FILES/signer.conf etc/signer.conf;
-          java -Xmx{{ .Values.cordaJar.memorySize }}{{ .Values.cordaJar.unit }} -jar {{ .Values.config.jarPath }}/signer.jar --config-file {{ .Values.config.configPath }}/signer.conf
+          java -Xmx{{ .Values.config.cordaJar.memorySize }}{{ .Values.config.cordaJar.unit }} -jar {{ .Values.config.jarPath }}/signer.jar --config-file {{ .Values.config.configPath }}/signer.conf
         volumeMounts:
         - name: signer-conf
           mountPath: /opt/corda/CM-FILES/signer.conf
@@ -165,9 +165,9 @@ spec:
           mountPath: /opt/corda/DATA
         resources:
           requests:
-            memory: {{ .Values.cordaJar.resources.requests}}
+            memory: {{ .Values.config.cordaJar.resources.requests}}
           limits:
-            memory: {{ .Values.cordaJar.resources.limits}}
+            memory: {{ .Values.config.cordaJar.resources.limits}}
       - name: logs
         image: "{{ required "signer[main]: missing value for .Values.iamage.signerContainerName" .Values.image.signerContainerName }}"
         env:
