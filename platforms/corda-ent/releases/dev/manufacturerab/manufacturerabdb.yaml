@@ -1,0 +1,39 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: manufacturerabdb
+  namespace: manufacturerab-ent
+  annotations:
+    flux.weave.works/automated: "false"
+spec:
+  releaseName: manufacturerabdb
+  chart:
+    git: git@github.com:abevers/blockchain-automation-framework.git
+    ref: feature/cleanup-test
+    path: platforms/corda-ent/charts/h2
+  values:
+    nodeName: manufacturerab
+    metadata:
+      namespace: manufacturerab-ent
+    replicaCount: 1
+    image:
+      containerName: index.docker.io/hyperledgerlabs/h2:2018
+      imagePullSecret: regcred
+    resources:
+      limits: 128Mi
+      requests: 128Mi
+    storage:
+      name: cordaentsc
+      memory: 128Mi
+    service:
+      type: NodePort
+      tcp:
+        port: 9101
+        targetPort: 1521
+      web:
+        targetPort: 81
+        port: 8080
+    deployment:
+      annotations: {}
+    pvc:
+      annotations: {}
