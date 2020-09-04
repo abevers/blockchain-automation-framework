@@ -47,7 +47,7 @@ spec:
     - port: {{ .Values.service.shell.sshdPort }}
       targetPort: {{ .Values.service.shell.sshdPort }}
       protocol: TCP
-      {{- if .Values.shell.nodePort }}
+      {{- if .Values.service.shell.nodePort }}
       nodePort: {{ .Values.service.shell.nodePort }}
       {{- end }}
       name: ssh

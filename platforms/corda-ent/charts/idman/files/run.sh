@@ -8,10 +8,10 @@ then
     echo
     echo "CENM: starting Identity Manager process ..."
     echo
-    java -Xmx{{ .Values.cordaJar.memorySize }}{{ .Values.cordaJar.unit }} -jar {{ .Values.config.volume.baseDir }}/identitymanager.jar -f {{ .Values.config.configPath }}/idman.conf
+    java -Xmx{{ .Values.config.cordaJar.memorySize }}{{ .Values.config.cordaJar.unit }} -jar {{ .Values.config.volume.baseDir }}/identitymanager.jar -f {{ .Values.config.configPath }}/idman.conf
     EXIT_CODE=${?}
 else
-    echo "Missing Identity Manager jar file in {{ .Valuesconfig.volume.baseDir }} folder:"
+    echo "Missing Identity Manager jar file in {{ .Values.config.volume.baseDir }} folder:"
     ls -al {{ .Values.config.volume.baseDir }}
     EXIT_CODE=110
 fi
