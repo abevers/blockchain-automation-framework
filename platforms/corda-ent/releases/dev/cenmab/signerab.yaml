@@ -1,0 +1,77 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: signerab
+  annotations:
+    flux.weave.works/automated: "false"
+  namespace: cenmab-ent
+spec:
+  releaseName: signerab
+  chart:
+    path: platforms/corda-ent/charts/signer
+    git: git@github.com:abevers/blockchain-automation-framework.git
+    ref: feature/cleanup-test
+  values:
+    nodeName: signerab
+    metadata:
+      namespace: cenmab-ent
+    image:
+      initContainerName: adopblockchaincloud0502.azurecr.io/alpine-utils:1.0
+      signerContainerName: adopblockchaincloud0502.azurecr.io/corda/enterprise-signer:1.2-zulu-openjdk8u242
+      imagePullSecret: regcred
+      pullPolicy: Always
+    acceptLicense: YES
+    vault:
+      address: http://vault.internal.dev2.aws.blockchaincloudpoc-develop.com:20001
+      role: vault-role
+      authPath: cordaentcenmab
+      serviceAccountName: vault-auth
+      certSecretPrefix: secret/cenmab
+      retries: 10
+      sleepTimeAfterError: 15
+    service:
+      ssh:
+        port: 2222
+        targetPort: 2222
+        type: ClusterIP
+      shell:
+        user: signer
+        password: signerP
+    serviceLocations:
+      identityManager:
+        host: idmanab.cenmab-ent
+        publicIp: idmanab.rc.dev2.aws.blockchaincloudpoc-develop.com
+        port: 5052
+        publicPort: 8443
+      networkMap:
+        host: networkmapab.cenmab-ent
+        port: 5050
+      revocation:
+        port: 5053
+    signers:
+      CSR:
+        schedule:
+          interval: 1m
+      CRL:
+        schedule:
+          interval: 1d
+      NetworkMap:
+        schedule:
+          interval: 1m
+      NetworkParameters:
+        schedule:
+          interval: 1m
+    config:
+      volume:
+        baseDir: /opt/corda
+      jarPath: bin
+      configPath: etc
+      cordaJar:
+        memorySize: 512
+        unit: M
+        resources:
+          limits: 512M
+          requests: 512M
+      replicas: 1
+    healthCheck:
+      nodePort: 0
