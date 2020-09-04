@@ -164,9 +164,9 @@ spec:
           mountPath: /opt/corda/DATA
         resources:
           requests:
-            memory: {{ .Values.config.cordaJar.resources.requests }}
+            memory: {{ .Values.config.pod.resources.requests }}
           limits:
-            memory: {{ .Values.config.cordaJar.resources.limits }}
+            memory: {{ .Values.config.pod.resources.limits }}
       - name: logs
         image: "{{ required "signer[main]: missing value for .Values.iamage.signerContainerName" .Values.image.signerContainerName }}"
         env:
