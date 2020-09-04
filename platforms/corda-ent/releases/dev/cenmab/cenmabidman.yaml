@@ -30,6 +30,8 @@ spec:
       role: vault-role
       authPath: cordaentcenmab
       serviceAccountName: vault-auth
+      retries: 10
+      sleepTimeAfterError: 15
     service:
       external:
         port: 10000
