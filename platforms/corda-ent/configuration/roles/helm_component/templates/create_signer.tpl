@@ -15,7 +15,6 @@ spec:
     nodeName: {{ org.services.signer.name }}
     metadata:
       namespace: {{ component_ns }}
-    replicas: 1
     image:
       initContainerName: {{ network.docker.url }}/alpine-utils:1.0
       signerContainerName: {{ network.docker.url }}/corda/enterprise-signer:1.2-zulu-openjdk8u242
@@ -28,13 +27,16 @@ spec:
       authPath: {{ component_auth }}
       serviceAccountName: vault-auth
       certSecretPrefix: secret/{{ org.name | lower }}
-    serviceSsh:
-      port: 2222
-      targetPort: 2222
-      type: ClusterIP
-    shell:
-      user: signer
-      password: signerP
+      retries: 10
+      sleepTimeAfterError: 15
+    service:
+      ssh:
+        port: 2222
+        targetPort: 2222
+        type: ClusterIP
+      shell:
+        user: signer
+        password: signerP
     serviceLocations:
       identityManager:
         host: {{ org.services.idman.name }}.{{ org.name | lower }}-ent
@@ -59,12 +61,17 @@ spec:
       NetworkParameters:
         schedule:
           interval: 1m
-    volume:
-      baseDir: /opt/corda
-    jarPath: bin
-    configPath: etc
-    cordaJarMx: 1
+    config:
+      volume:
+        baseDir: /opt/corda
+      jarPath: bin
+      configPath: etc
+      cordaJar:
+        memorySize: 512
+        unit: M
+        resources:
+          limits: 512M
+          requests: 512M
+      replicas: 1
     healthCheck:
-      readinessCheckInterval: 10
-      readinessThreshold: 15
       nodePort: 0

@@ -22,6 +22,7 @@ spec:
       imagePullSecret: {{ image_pull_secret }}
     storage:
       name: {{ storageclass }}
+      memory: 64Mi
     acceptLicense: YES
     vault:
       address: {{ vault_addr }}
@@ -30,28 +31,35 @@ spec:
       authPath: {{ auth_path }}
       serviceAccountName: {{ vault_serviceaccountname }}
     service:
-      port: {{ idman_port }}
-    serviceInternal:
-      port: 5052
-    serviceRevocation:
-      port: 5053
-    shell:
-      sshdPort: 2222
-      user: {{ ssh_username }}
-      password: {{ ssh_password }}
+      external:
+        port: {{ idman_port }}
+      internal:
+        port: 5052
+      revocation:
+        port: 5053
+      shell:
+        sshdPort: 2222
+        user: {{ ssh_username }}
+        password: {{ ssh_password }}
     database:
       driverClassName: "org.h2.Driver"
       url: "jdbc:h2:file:./h2/identity-manager-persistence;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=10000;WRITE_DELAY=0;AUTO_SERVER_PORT=0"
       user: {{ db_username }}
       password: {{ db_password }}
       runMigration: "true"
-    volume:
-      baseDir: /opt/corda
-    jarPath: bin
-    configPath: etc
-    cordaJarMx: 1
-    replicas: 1
-    sleepTimeAfterError: 120
+    config:
+      volume:
+        baseDir: /opt/corda
+      jarPath: bin
+      configPath: etc
+      cordaJar:
+        memorySize: 512
+        unit: M
+        resources:
+          limits: 512M
+          requests: 512M
+      replicas: 1
+      sleepTimeAfterError: 120
     healthCheck:
       readinessCheckInterval: 10
       readinessThreshold: 15
