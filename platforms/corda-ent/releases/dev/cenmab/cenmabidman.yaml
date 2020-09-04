@@ -57,7 +57,7 @@ spec:
         unit: M
         resources:
           limits: 512M
-          requests: 550M
+          requests: 512M
       replicas: 1
       sleepTimeAfterError: 120
     healthCheck:
