@@ -17,14 +17,14 @@
     charts_dir: "{{ org.gitops.chart_source }}"
     values_dir: "{{playbook_dir}}/../../../{{ org.gitops.release_dir }}"
     float_name: "{{ peer.firewall.float.name }}"
-    init_container_name: "{{ network.docker.url }}/alpine-utils:1.0"
+    init_container_name: "index.docker.io/hyperledgerlabs/alpine-utils:1.0"
     image_pull_secret: "regcred"
     vault_addr: "{{ org.vault.url }}"
     vault_role: "vault-role"
     auth_path: "cordaent{{ org.name | lower }}"
     vault_serviceaccountname: "vault-auth"
     vault_cert_secret_prefix: "secret/{{ org.name | lower }}"
-    storageclass: cenmsc
+    storageclass: cordaentsc
     float_address: "{{ peer.firewall.float.name | lower }}.{{ org.name | lower }}-ent"
     float_port: "{{ peer.firewall.float.port }}"
     bridge_subject: "{{ peer.firewall.bridge.subject }}"
@@ -34,6 +34,7 @@
   loop: "{{ org.services.peers }}"
   loop_control:
     loop_var: peer
+  when: peer.firewall.enabled
     
 # Git Push : Pushes the above generated files to git directory 
 - name: Git Push

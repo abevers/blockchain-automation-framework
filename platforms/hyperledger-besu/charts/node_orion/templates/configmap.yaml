@@ -24,20 +24,20 @@ data:
     othernodes = ["{{ .Values.orion.url }}:{{ .Values.proxy.tmport }}/",{{ .Values.orion.nodelist }}]
 {{- if $.Values.orion.tls }}
     tls = "strict"
-    tlsclienttrust = "ca-or-tofu"
-    tlsservertrust = "ca-or-tofu"
+    tlsclienttrust = "{{ .Values.orion.trust }}"
+    tlsservertrust = "{{ .Values.orion.trust }}"
     tlsservercert = "/secrets/orion_cer.pem"
     tlsserverchain = ["/secrets/orion_ca.pem"]
     tlsserverkey = "/secrets/orion_cer.key"
     tlsclientcert = "/secrets/orion_cer.pem"
     tlsclientchain = ["/secrets/orion_ca.pem"]
     tlsclientkey = "/secrets/orion_cer.key"
-    clientconnectiontls = "off"
-    clienturl = "http://{{ .Values.node.name }}.{{ .Values.metadata.namespace }}:{{ .Values.orion.ports.clientport }}/"
+    clientconnectiontls = "strict"
+    clienturl = "https://{{ .Values.node.name }}.{{ .Values.metadata.namespace }}:{{ .Values.orion.ports.clientport }}/"
     clientconnectiontlsservercert = "/secrets/orion_cer.pem"
     clientconnectiontlscertchain = []
     clientconnectiontlsserverkey = "/secrets/orion_cer.key"
-    clientconnectiontlsservertrust = "ca-or-tofu"
+    clientconnectiontlsservertrust = "{{ .Values.orion.trust }}"
 {{- else }}
     tls = "off"
     clientconnectiontls = "off"
