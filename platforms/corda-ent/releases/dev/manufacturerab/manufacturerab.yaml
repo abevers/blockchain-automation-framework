@@ -31,7 +31,7 @@ spec:
       idmanDomain: idmanab.rc.dev2.aws.blockchaincloudpoc-develop.com
       networkMapDomain: networkmapab.rc.dev2.aws.blockchaincloudpoc-develop.com
     firewall:
-      enabled: True
+      enabled: False
     cenmServices:  
       idmanName: idmanab
       networkmapName: networkmapab
@@ -54,8 +54,8 @@ spec:
     tlsCertCrlIssuer: "CN=Corda TLS CRL Authority,OU=Corda UAT,O=R3 HoldCo LLC,L=New York,C=US"
     devMode: false
     service:
-      p2pPort: 40000
-      p2pAddress: float.manufacturerab-ent
+      p2pPort: 10002
+      p2pAddress: manufacturerab.manufacturerab-ent
     ssh:
       enabled: true
       sshdPort: 2222
