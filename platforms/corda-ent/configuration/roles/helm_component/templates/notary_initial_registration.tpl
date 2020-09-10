@@ -50,6 +50,8 @@ spec:
       networkmapName: {{ org.services.networkmap.name }}
       networkMapURL: {{ networkmap_url }}
       networkMapDomain: {{ networkmap_domain }}
+      idmanName: {{ org.services.idman.name }}
+      networkmapName: {{ org.services.networkmap.name }}
     dataSourceProperties:
       dataSource:
         password: "{{ notary_service.name }}-db-password"
