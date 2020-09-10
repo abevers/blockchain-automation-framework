@@ -99,7 +99,8 @@ spec:
                     sleep {{ $.Values.vault.sleepTimeAfterError }}
                   else
                   notary_nodeinfo=$(echo ${LOOKUP_SECRET_RESPONSE} | jq -r '.data["nodeInfoFile"]')
-                  echo "${notary_nodeinfo}" | base64 -d > ${NODEINFO_MOUNT_PATH}/notary_nodeinfo
+                  notary_nodeinfo_name=$(echo ${LOOKUP_SECRET_RESPONSE} | jq -r '.data["nodeInfoName"]')
+                  echo "${notary_nodeinfo}" | base64 -d > ${NODEINFO_MOUNT_PATH}/${notary_nodeinfo_name}
                   echo "Successfully got node info file"
                   break
                 fi
