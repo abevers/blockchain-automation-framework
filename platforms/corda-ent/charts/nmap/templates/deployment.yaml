@@ -76,7 +76,7 @@ spec:
               COUNTER=1
               while [ "$COUNTER" -lt {{ $.Values.vault.retries }} ]
               do 
-                LOOKUP_SECRET_RESPONSE=$(curl -sS --header "X-Vault-Token: ${VAULT_TOKEN}" ${VAULT_ADDR}/v1/${CERTS_SECRET_PREFIX}/{{ $.Values.serviceLocations.notary.name }}/nparam | jq -r 'if .errors then . else . end')
+                LOOKUP_SECRET_RESPONSE=$(curl -sS --header "X-Vault-Token: ${VAULT_TOKEN}" ${VAULT_ADDR}/v1/${CERTS_SECRET_PREFIX}/{{ $.Values.serviceLocations.notary.name }}/networkparam | jq -r 'if .errors then . else . end')
                 if echo ${LOOKUP_SECRET_RESPONSE} | grep "errors"
                   then
                     sleep {{ $.Values.vault.sleepTimeAfterError }}
