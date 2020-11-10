@@ -8,8 +8,8 @@ metadata:
 spec:
   releaseName: {{ component_name }}
   chart:
-    git: {{ git_url }}
-    ref: {{ git_branch }}
+    git: {{ org.gitops.git_ssh }}
+    ref: {{ org.gitops.branch }}
     path: {{ charts_dir }}/notary
   values:
     nodeName: {{ component_name }}
@@ -23,7 +23,7 @@ spec:
       privateCertificate: true
     vault:
       address: {{ org.vault.url }}
-      certSecretPrefix: secret/{{ org.name | lower }}
+      certSecretPrefix: {{ org.vault.secret_path | default('secret') }}/{{ org.name | lower }}
       serviceAccountName: vault-auth
       role: vault-role
       authPath: cordaent{{ org.name | lower }}
@@ -58,7 +58,7 @@ spec:
       dataSourceClassName: "org.h2.jdbcx.JdbcDataSource"
       dbUrl: "{{ component_name }}db"
       dbPort: {{ notary_service.dbtcp.port }}
-{% if org.cordapps|length %}
+{% if (org.cordapps is defined) and (org.cordapps|length > 0) %}
     cordapps:
       getcordapps: true
       jars:
@@ -83,7 +83,7 @@ spec:
         p2pPort: {{ notary_service.p2p.ambassador | default('10002') }}
         external_url_suffix: {{ org.external_url_suffix }}
         p2pAddress: {{ component_name }}.{{ org.external_url_suffix }}:{{ notary_service.p2p.ambassador | default('10002') }}
-      jarPath: bin
+      jarPath: /opt/cenm/bin
       configPath: etc
       cordaJar:
         memorySize: 1524
