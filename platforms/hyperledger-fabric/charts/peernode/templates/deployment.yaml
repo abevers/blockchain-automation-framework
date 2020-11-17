@@ -55,6 +55,9 @@ spec:
           items:
             - key: mspconfig
               path: mspconfig
+      - name: datadir-couchdb
+        persistentVolumeClaim:
+          claimName: {{ $.Values.peer.name }}-db-volume      
       initContainers:
       - name: certificates-init
         image: {{ $.Values.metadata.images.alpineutils}}
