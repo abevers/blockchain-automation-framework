@@ -1,0 +1,43 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: supplychainab-net-ca
+  namespace: supplychainab-net
+  annotations:
+    fluxcd.io/automated: "false"
+spec:
+  releaseName: supplychainab-net-ca
+  chart:
+    git: git@github.com:abevers/blockchain-automation-framework.git
+    ref: bug/1132-dcr-test
+    path: platforms/hyperledger-fabric/charts/ca    
+  values:
+    metadata:
+      namespace: supplychainab-net
+      images:
+        alpineutils: adopblockchaincloud0502.azurecr.io/alpine-utils:1.0
+        ca: hyperledger/fabric-ca:1.4.4
+    server:
+      name: ca
+      tlsstatus: true
+      admin: supplychainab-admin
+    storage:
+      storageclassname: supplychainabsc
+      storagesize: 512Mi 
+    vault:
+      role: vault-role
+      address: http://a69dcf9f62bf6447fbfcd44974115225-1542211731.eu-west-1.elb.amazonaws.com:20002
+      authpath: supplychainab-net-auth
+      secretcert: secret/crypto/ordererOrganizations/supplychainab-net/ca?ca.supplychainab-net-cert.pem
+      secretkey: secret/crypto/ordererOrganizations/supplychainab-net/ca?supplychainab-net-CA.key
+      secretadminpass: secret/credentials/supplychainab-net/ca/supplychainab?user
+      serviceaccountname: vault-auth
+      imagesecretname: regcred
+    service:
+      servicetype: ClusterIP
+      ports:
+        tcp:
+          port: 7054
+    proxy:
+      provider: haproxy
+      type: orderer
