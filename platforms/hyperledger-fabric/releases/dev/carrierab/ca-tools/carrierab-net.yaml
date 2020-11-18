@@ -1,0 +1,29 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: carrierab-net-ca-tools
+  namespace: carrierab-net
+  annotations:
+    fluxcd.io/automated: "false"
+spec:
+  releaseName: carrierab-net-ca-tools
+  chart:
+    git: git@github.com:abevers/blockchain-automation-framework.git
+    ref: bug/1132-dcr-test
+    path: platforms/hyperledger-fabric/charts/catools
+  values:
+    metadata:
+      namespace: carrierab-net
+      name: ca-tools
+
+    replicaCount: 1
+
+    image:
+      repository: hyperledger/fabric-ca-tools
+      tag: 1.2.0
+      pullPolicy: IfNotPresent
+      
+    storage:
+      storageclassname: carrierabsc
+      storagesize: 512Mi
+
