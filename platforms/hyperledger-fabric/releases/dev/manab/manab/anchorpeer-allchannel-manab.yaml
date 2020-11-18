@@ -1,0 +1,48 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: anchorpeer-allchannel-manab
+  namespace: manab-net
+  annotations:
+    fluxcd.io/automated: "false"
+spec:
+  releaseName: anchorpeer-allchannel-manab
+  chart:
+    git: git@github.com:abevers/blockchain-automation-framework.git
+    ref: bug/1132-dcr-test
+    path: platforms/hyperledger-fabric/charts/anchorpeer
+  values:
+    metadata:
+      namespace: manab-net
+      images:
+        fabrictools: hyperledger/fabric-tools:1.4.4
+        alpineutils: adopblockchaincloud0502.azurecr.io/alpine-utils:1.0
+
+    peer:
+      name: peer0
+      address: peer0.manab-net.hf.devh3.aws.blockchaincloudpoc-develop.com:8443
+      localmspid: manabMSP
+      loglevel: debug
+      tlsstatus: true
+
+    vault:
+      role: vault-role
+      address: http://a69dcf9f62bf6447fbfcd44974115225-1542211731.eu-west-1.elb.amazonaws.com:20002
+      authpath: manab-net-auth
+      adminsecretprefix: secret/crypto/peerOrganizations/manab-net/users/admin
+      orderersecretprefix: secret/crypto/peerOrganizations/manab-net/orderer
+      serviceaccountname: vault-auth
+      imagesecretname: regcred
+
+    channel:
+      name: allchannel      
+    orderer:
+      address: orderer1.hf.devh3.aws.blockchaincloudpoc-develop.com:8443
+    anchorstx: |-
+      CsQCChAKDggCIgphbGxjaGFubmVsEq8CCqwCCgphbGxjaGFubmVsElgSVgoLQXBwbGljYXRpb24S
+      RwgBEjsKCG1hbmFiTVNQEi8aBwoDTVNQEgAiCwoHV3JpdGVycxIAIgoKBkFkbWlucxIAIgsKB1Jl
+      YWRlcnMSACoGQWRtaW5zGsMBEsABCgtBcHBsaWNhdGlvbhKwAQgBEqMBCghtYW5hYk1TUBKWAQgB
+      GgcKA01TUBIAGlsKC0FuY2hvclBlZXJzEkwSQgpACjtwZWVyMC5tYW5hYi1uZXQuaGYuZGV2aDMu
+      YXdzLmJsb2NrY2hhaW5jbG91ZHBvYy1kZXZlbG9wLmNvbRD7QRoGQWRtaW5zIgsKB1JlYWRlcnMS
+      ACILCgdXcml0ZXJzEgAiCgoGQWRtaW5zEgAqBkFkbWlucyoGQWRtaW5z
+
