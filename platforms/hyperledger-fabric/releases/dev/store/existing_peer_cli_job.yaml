@@ -1,0 +1,24 @@
+metadata:
+  namespace: store-net
+  images:
+    fabrictools: hyperledger/fabric-tools:2.2.0
+    alpineutils: index.docker.io/hyperledgerlabs/alpine-utils:1.0
+storage:
+  class: storesc
+  size: 256Mi
+vault:
+  role: vault-role
+  address: http://vault.internal.demo.aws.blockchaincloudpoc.com:9001
+  authpath: store-net-auth
+  adminsecretprefix: secret/crypto/peerOrganizations/store-net/users/admin
+  orderersecretprefix: secret/crypto/peerOrganizations/store-net/orderer
+  serviceaccountname: vault-auth
+  imagesecretname: regcred
+  tls: false
+peer:
+  name: peer0
+  localmspid: storeMSP
+  tlsstatus: true
+  address: peer0.store-net.hf.demo.aws.blockchaincloudpoc.com:8443
+orderer:
+  address: orderer1.hf.demo.aws.blockchaincloudpoc.com:8443
