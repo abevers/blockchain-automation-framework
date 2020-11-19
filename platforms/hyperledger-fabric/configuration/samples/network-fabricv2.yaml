@@ -127,7 +127,7 @@ network:
       vault:
         url: "vault_addr"
         root_token: "vault_root_token"
-
+        secret_path: "secret"
       # Git Repo details which will be used by GitOps/Flux.
       # Do not check-in git_access_token
       gitops:
@@ -207,7 +207,7 @@ network:
       vault:
         url: "vault_addr"
         root_token: "vault_root_token"
-
+        secret_path: "secret"
       # Git Repo details which will be used by GitOps/Flux.
       # Do not check-in git_access_token
       gitops:
@@ -253,7 +253,7 @@ network:
             name: "chaincode_name" #This has to be replaced with the name of the chaincode
             version: "chaincode_version" #This has to be replaced with the version of the chaincode
             maindirectory: "chaincode_main"  #The main directory where chaincode is needed to be placed
-            lang: "golang"  # The language in which the chaincode is written ( golang/ java)
+            lang: "golang"  # The language in which the chaincode is written ( golang/java/node )
             repository:
               username: "git_username"          # Git Service user who has rights to check-in in all branches
               password: "git_access_token"
@@ -294,7 +294,7 @@ network:
       vault:
         url: "vault_addr"
         root_token: "vault_root_token"
-
+        secret_path: "secret"
       # Git Repo details which will be used by GitOps/Flux.
       # Do not check-in git_access_token
       gitops:
@@ -338,7 +338,7 @@ network:
             name: "chaincode_name"   #This has to be replaced with the name of the chaincode
             version: "chaincode_version"   #This has to be replaced with the version of the chaincode
             maindirectory: "chaincode_main"    #The main directory where chaincode is needed to be placed
-            lang: "golang"  # The language in which the chaincode is written ( golang/ java)
+            lang: "golang"  # The language in which the chaincode is written ( golang/java/node )
             repository:
               username: "git_username"          # Git Service user who has rights to check-in in all branches
               password: "git_access_token"
@@ -377,7 +377,7 @@ network:
       vault:
         url: "vault_addr"
         root_token: "vault_root_token"
-
+        secret_path: "secret"
       # Git Repo details which will be used by GitOps/Flux.
       # Do not check-in git_access_token
       gitops:
@@ -426,7 +426,7 @@ network:
             name: "chaincode_name" #This has to be replaced with the name of the chaincode
             version: "chaincode_version" #This has to be replaced with the version of the chaincode
             maindirectory: "chaincode_main"  #The main directory where chaincode is needed to be placed
-            lang: "golang"  # The language in which the chaincode is written ( golang/ java)
+            lang: "golang"  # The language in which the chaincode is written ( golang/java/node )
             repository:
               username: "git_username"          # Git Service user who has rights to check-in in all branches
               password: "git_access_token"
@@ -467,7 +467,7 @@ network:
       vault:
         url: "vault_addr"
         root_token: "vault_root_token"
-
+        secret_path: "secret"
       # Git Repo details which will be used by GitOps/Flux.
       # Do not check-in git_access_token
       gitops:
@@ -511,7 +511,7 @@ network:
             name: "chaincode_name"     #This has to be replaced with the name of the chaincode
             version: "chaincode_version"     #This has to be replaced with the version of the chaincode
             maindirectory: "chaincode_main"   #The main directory where chaincode is needed to be placed
-            lang: "golang"  # The language in which the chaincode is written ( golang/ java)
+            lang: "golang"  # The language in which the chaincode is written ( golang/java/node )
             repository:
               username: "git_username"          # Git Service user who has rights to check-in in all branches
               password: "git_access_token"
