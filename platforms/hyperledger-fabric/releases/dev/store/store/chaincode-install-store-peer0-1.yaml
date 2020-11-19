@@ -47,6 +47,6 @@ spec:
         hostname: "github.com"
         git_username: "abevers"
         url: github.com/abevers/blockchain-automation-framework.git
-        branch: fabric
+        branch: develop
         path: examples/supplychain-app/fabric/chaincode_rest_server/chaincode/
       endorsementpolicies:  ''
