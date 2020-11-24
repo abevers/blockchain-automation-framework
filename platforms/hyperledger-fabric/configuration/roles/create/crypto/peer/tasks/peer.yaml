@@ -27,8 +27,7 @@
 # This task copy the peer certificate to the path provided in network.yaml
 - name: Copy msp cacerts from auto-generated path to given path
   copy:
-    #src: "./build/crypto-config/peerOrganizations/{{ component_name }}/peers/{{ peer.name }}.{{ component_name }}/msp/cacerts/ca-{{ component_name }}-7054.pem"
-    src: "./build/crypto-config/peerOrganizations/{{ component_name }}/msp/cacerts/ca-{{ component_name }}-7054.pem"
+    src: "./build/crypto-config/peerOrganizations/{{ component_name }}/peers/{{ peer.name }}.{{ component_name }}/msp/cacerts/ca-{{ component_name }}-7054.pem"
     dest: "{{ peer.certificate }}"
     follow: no
     force: yes
