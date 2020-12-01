@@ -1,0 +1,41 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: joinchannel-peer1-join-allchannel-carrierab-peer1
+  namespace: carrierab-net
+  annotations:
+    fluxcd.io/automated: "false"
+spec:
+  releaseName: joinchannel-peer1-join-allchannel-carrierab-peer1
+  chart:
+    git: git@github.com:abevers/blockchain-automation-framework.git
+    ref: fabric-comp-test
+    path: platforms/hyperledger-fabric/charts/join_channel
+  values:
+    metadata:
+      namespace: carrierab-net
+      images:
+        fabrictools: hyperledger/fabric-tools:1.4.4
+        alpineutils: adopblockchaincloud0502.azurecr.io/alpine-utils:1.0
+
+    peer:
+      name: peer1
+      address: peer1.carrierab-net.hf.dev2.aws.blockchaincloudpoc-develop.com:8443
+      localmspid: carrierabMSP
+      loglevel: debug
+      tlsstatus: true
+
+    vault:
+      role: vault-role
+      address: http://vault.internal.dev2.aws.blockchaincloudpoc-develop.com:20001
+      authpath: carrierab-net-auth
+      adminsecretprefix: secret/crypto/peerOrganizations/carrierab-net/users/admin
+      orderersecretprefix: secret/crypto/peerOrganizations/carrierab-net/orderer
+      serviceaccountname: vault-auth
+      imagesecretname: regcred
+
+    channel:
+      name: allchannel      
+    orderer:
+      address: orderer9.hf.dev2.aws.blockchaincloudpoc-develop.com:8443
+
